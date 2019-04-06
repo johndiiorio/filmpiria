@@ -2,14 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from '@material-ui/styles';
 import { CssBaseline } from '@material-ui/core';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider as ReduxProvider } from 'react-redux';
+import logger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 import theme from './theme';
-import App from './App';
+import App from './components/App';
+import reducers from './redux/reducers';
+import saga from './redux/saga';
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(reducers, applyMiddleware(logger, sagaMiddleware));
+sagaMiddleware.run(saga);
 
 const AppWithProviders = () => {
 	return (
 		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<App />
+			<ReduxProvider store={store}>
+				<CssBaseline />
+				<App />
+			</ReduxProvider>
 		</ThemeProvider>
 	);
 };

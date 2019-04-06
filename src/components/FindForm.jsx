@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Fade } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Help from './Help';
-import { parseRatingsFile } from './utils';
+import { find } from '../redux/actions';
+import { parseRatingsFile } from '../utils';
 
 const useStyles = makeStyles(theme => ({
 	container: {
@@ -37,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function FindForm() {
+const FindForm = ({ dispatch, history }) => {
 	const classes = useStyles();
 	const [name, updateName] = useState('');
 	const [ratings, updateRatings] = useState([]);
@@ -65,6 +68,11 @@ export default function FindForm() {
 			}, 3000);
 		}
 	}
+
+	const onFindClick = async () => {
+		dispatch(find({ name, ratings }));
+		history.push('/results');
+	};
 
 	return (
 		<div className={classes.container}>
@@ -114,10 +122,12 @@ export default function FindForm() {
 			</div>
 			<div className={classes.row}>
 				<Typography variant="h6">3. Find similar users.</Typography>
-				<Button color="primary" variant="contained" className={classes.button} disabled={disabled}>
+				<Button color="primary" variant="contained" className={classes.button} disabled={disabled} onClick={onFindClick}>
 					Find
 				</Button>
 			</div>
 		</div>
 	)
 }
+
+export default withRouter(connect()(FindForm));
