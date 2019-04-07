@@ -2,7 +2,7 @@ import * as actions from './actions';
 
 const initialState = {
 	fetching: false,
-	error: false,
+	error: '',
 	results: {},
 };
 
@@ -12,17 +12,20 @@ export default function find(state = initialState, action) {
 			return {
 				...state,
 				fetching: true,
+				error: '',
 			};
 		case actions.FIND_SUCCESS:
 			return {
 				...state,
 				fetching: false,
 				results: action.payload,
+				error: '',
 			};
 		case actions.FIND_ERROR:
 			return {
 				...state,
 				fetching: false,
+				error: action.error,
 			};
 		default:
 			return state;

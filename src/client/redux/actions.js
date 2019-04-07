@@ -3,9 +3,10 @@ export const FIND_PENDING = 'FIND_PENDING';
 export const FIND_SUCCESS = 'FIND_SUCCESS';
 export const FIND_ERROR = 'FIND_ERROR';
 
-export const find = payload => ({
+export const find = (payload, history) => ({
 	type: FIND,
 	payload,
+	history,
 });
 
 export const findPending = () => ({
@@ -17,6 +18,7 @@ export const findSuccess = payload => ({
 	payload,
 });
 
-export const findError = () => ({
+export const findError = error => ({
 	type: FIND_ERROR,
+	error,
 });

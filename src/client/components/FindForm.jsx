@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { TextField, Button, Typography, Fade } from '@material-ui/core';
+import { TextField, Button, Typography, Fade, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Help from './Help';
@@ -32,26 +32,33 @@ const useStyles = makeStyles(theme => ({
 		color: '#f84949',
 		marginLeft: 10,
 	},
+	submitContainer: {
+		display: 'flex',
+		alignItems: 'center',
+	},
 	button: {
 		margin: theme.spacing(1),
+	},
+	progress: {
+		margin: theme.spacing(2),
 	},
 	input: {
 		display: 'none',
 	}
 }));
 
-const FindForm = ({ dispatch, history }) => {
+const FindForm = ({ dispatch, history, fetching, submitError }) => {
 	const classes = useStyles();
 	const [name, updateName] = useState('');
 	const [ratings, updateRatings] = useState([]);
-	const [errorText, updateErrorText] = useState('');
+	const [uploadErrorText, updateUploadErrorText] = useState('');
 
-	const disabled = !name || !ratings.length;
+	const disabled = !name || !ratings.length || fetching;
 
 	const onFileUpload = async e => {
 		const file = e.target.files[0];
 		let error = '';
-		if (file.name !== 'ratings.csv'){
+		if (file.name !== 'ratings.csv') {
 			error = 'Please select the ratings.csv file';
 		} else {
 			const parsedRatings = await parseRatingsFile(file);
@@ -62,16 +69,15 @@ const FindForm = ({ dispatch, history }) => {
 			}
 		}
 		if (error) {
-			updateErrorText(error);
+			updateUploadErrorText(error);
 			setTimeout(() => {
-				updateErrorText('')
+				updateUploadErrorText('')
 			}, 3000);
 		}
 	}
 
 	const onFindClick = async () => {
-		dispatch(find({ name, ratings }));
-		history.push('/results');
+		dispatch(find({ name, ratings }, history));
 	};
 
 	return (
@@ -115,19 +121,35 @@ const FindForm = ({ dispatch, history }) => {
 					{ratings.length > 0 && (
 						<Typography className={classes.ratingsFound}>{ratings.length} ratings found</Typography>
 					)}
-					<Fade in={!!errorText}>
-						<Typography className={classes.errorText}>{errorText}</Typography>
+					<Fade in={!!uploadErrorText}>
+						<Typography className={classes.errorText}>{uploadErrorText}</Typography>
 					</Fade>
 				</div>
 			</div>
 			<div className={classes.row}>
 				<Typography variant="h6">3. Find similar users.</Typography>
-				<Button color="primary" variant="contained" className={classes.button} disabled={disabled} onClick={onFindClick}>
-					Find
-				</Button>
+				<div className={classes.submitContainer}>
+					<Button
+						color="primary"
+						variant="contained"
+						className={classes.button}
+						disabled={disabled}
+						onClick={onFindClick}>
+						Find
+					</Button>
+					{fetching && <CircularProgress className={classes.progress} />}
+					<Fade in={!!submitError}>
+						<Typography className={classes.errorText}>{submitError}</Typography>
+					</Fade>
+				</div>
 			</div>
 		</div>
 	)
 }
 
-export default withRouter(connect()(FindForm));
+const mapStateToProps = state => ({
+	fetching: state.fetching,
+	submitError: state.error,
+})
+
+export default withRouter(connect(mapStateToProps)(FindForm));

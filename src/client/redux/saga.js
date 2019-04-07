@@ -2,16 +2,15 @@ import { put, call, takeLatest, all } from 'redux-saga/effects'
 import axios from 'axios';
 import { FIND, findPending, findError, findSuccess } from './actions';
 
-export function* find({ payload }) {
+export function* find({ payload, history }) {
 	yield put(findPending());
 	try {
 		const response = yield call(axios.post, '/api/find', payload);
-		if (!response.ok) {
-			throw response;
-		}
-		yield put(findSuccess(response.body()));
+		yield put(findSuccess(response.data));
+		history.push('/results');
 	} catch (err) {
-		yield put(findError());
+		const errorMessage = err.response && err.response.data ? err.response.data : 'Unknown Error';
+		yield put(findError(errorMessage));
 	}
 }
 

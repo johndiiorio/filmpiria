@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-const Results = ({ results, fetching }) => {
+const Results = ({ results, history }) => {
+	if (!results.length) {
+		history.push('/');
+	}
 	return (
-		<div>{fetching ? 'fetching' : 'not fetching'}</div>
+		<div>Results</div>
 	);
 }
 
 const mapStateToProps = state => ({
-	fetching: state.fetching,
 	results: state.results,
 });
-export default connect(mapStateToProps)(Results);
+export default withRouter(connect(mapStateToProps)(Results));

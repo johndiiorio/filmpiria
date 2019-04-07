@@ -16,7 +16,7 @@ router.post('/', async (req, res, next) => {
 			}
 		};
 		if (!validate(req.body, validReq).valid) {
-			res.sendStatus(400);
+			res.status(400).send('Invalid request');
 			return;
 		}
 		let { name: rawName, ratings: rawRatings } = req.body;
@@ -34,11 +34,12 @@ router.post('/', async (req, res, next) => {
 			return true;
 		});
 		if (!name.length || ratings.length !== rawRatings.length) {
-			res.sendStatus(400);
+			res.status(400).send('Invalid request');
 			return;
 		}
 		if (ratings.length < 50) {
-			// TODO send error, need more ratings
+			res.status(400).send('You must have rated at least 50 films');
+			return;
 		}
 		
 		const topUsers = await calculate(name, ratings);
