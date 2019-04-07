@@ -134,7 +134,8 @@ const FindForm = ({ dispatch, history, fetching, submitError }) => {
 						variant="contained"
 						className={classes.button}
 						disabled={disabled}
-						onClick={onFindClick}>
+						onClick={onFindClick}
+					>
 						Find
 					</Button>
 					{fetching && <CircularProgress className={classes.progress} />}

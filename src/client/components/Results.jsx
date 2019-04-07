@@ -1,13 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import AppBar from './AppBar';
+import UserCard from './UserCard';
 
 const Results = ({ results, history }) => {
-	if (!results.length) {
-		history.push('/');
-	}
+	// if (!results.length) {
+	// 	history.push('/');
+	// 	return null;
+	// }
+	const films = [
+		{ title: 'Movie Title', year: '1964'},
+		{ title: 'Movie Title', year: '1964'},
+		{ title: 'Movie Title', year: '1964'},
+		{ title: 'Movie Title', year: '1964'},
+	]
 	return (
-		<div>Results</div>
+		<>
+			<AppBar />
+			<UserCard name="user" films={films} />
+		</>
 	);
 }
 
