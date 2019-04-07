@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
 import Results from './Results';
 
@@ -23,8 +23,10 @@ export default function App() {
         		</Toolbar>
 			</AppBar>
 			<Router>
-				<Route exact path="/" component={Home} />
-				<Route exact path="/results" component={Results} />
+				<Switch>
+					<Route exact path="/results" component={Results} />
+					<Route path="/" component={Home} />
+				</Switch>
 			</Router>
 		</>
 	);

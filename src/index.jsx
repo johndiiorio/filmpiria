@@ -6,10 +6,10 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider as ReduxProvider } from 'react-redux';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import theme from './theme';
-import App from './components/App';
-import reducers from './redux/reducers';
-import saga from './redux/saga';
+import theme from './client/theme';
+import App from './client/components/App';
+import reducers from './client/redux/reducers';
+import saga from './client/redux/saga';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(logger, sagaMiddleware));

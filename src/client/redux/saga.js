@@ -1,13 +1,11 @@
 import { put, call, takeLatest, all } from 'redux-saga/effects'
+import axios from 'axios';
 import { FIND, findPending, findError, findSuccess } from './actions';
 
 export function* find({ payload }) {
 	yield put(findPending());
 	try {
-		const response = yield call(fetch, '/api/find', {
-			method: 'POST',
-			body: JSON.stringify(payload),
-		});
+		const response = yield call(axios.post, '/api/find', payload);
 		if (!response.ok) {
 			throw response;
 		}
