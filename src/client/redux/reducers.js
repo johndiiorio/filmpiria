@@ -1,31 +1,52 @@
 import * as actions from './actions';
 
 const initialState = {
-	fetching: false,
-	error: '',
-	results: {},
+	uploadFetching: false,
+	uploadError: '',
+	findFetching: false,
+	findError: '',
+	results: null,
 };
 
-export default function find(state = initialState, action) {
+export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		case actions.UPLOAD_PENDING:
+			return {
+				...state,
+				uploadFetching: true,
+				uploadError: '',
+			};
+		case actions.UPLOAD_SUCCESS:
+			return {
+				...state,
+				uploadFetching: false,
+				uploadError: '',
+				results: action.payload,
+			};
+		case actions.UPLOAD_ERROR:
+			return {
+				...state,
+				uploadFetching: false,
+				uploadError: action.error,
+			};
 		case actions.FIND_PENDING:
 			return {
 				...state,
-				fetching: true,
-				error: '',
+				findFetching: true,
+				findError: '',
 			};
 		case actions.FIND_SUCCESS:
 			return {
 				...state,
-				fetching: false,
+				findFetching: false,
+				findError: '',
 				results: action.payload,
-				error: '',
 			};
 		case actions.FIND_ERROR:
 			return {
 				...state,
-				fetching: false,
-				error: action.error,
+				findFetching: false,
+				findError: action.error,
 			};
 		default:
 			return state;

@@ -4,7 +4,7 @@ import { TextField, Button, Typography, Fade, CircularProgress } from '@material
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Help from './Help';
-import { find } from '../redux/actions';
+import { upload } from '../redux/actions';
 import { parseRatingsFile } from '../utils';
 
 const useStyles = makeStyles(theme => ({
@@ -47,13 +47,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const FindForm = ({ dispatch, history, fetching, submitError }) => {
+const UploadForm = ({ dispatch, history, uploadFetching, uploadError }) => {
 	const classes = useStyles();
 	const [name, updateName] = useState('');
 	const [ratings, updateRatings] = useState([]);
 	const [uploadErrorText, updateUploadErrorText] = useState('');
 
-	const disabled = !name || !ratings.length || fetching;
+	const disabled = !name || !ratings.length || uploadFetching;
 
 	const onFileUpload = async e => {
 		const file = e.target.files[0];
@@ -77,7 +77,7 @@ const FindForm = ({ dispatch, history, fetching, submitError }) => {
 	}
 
 	const onFindClick = async () => {
-		dispatch(find({ name, ratings }, history));
+		dispatch(upload({ name, ratings }, history));
 	};
 
 	return (
@@ -89,7 +89,7 @@ const FindForm = ({ dispatch, history, fetching, submitError }) => {
 					margin="normal"
 					variant="outlined"
 					value={name}
-					onChange={e => updateName(e.target.value)}
+					onChange={e => updateName(e.target.value.trim())}
 				/>
 			</div>
 			<div className={classes.row}>
@@ -138,9 +138,9 @@ const FindForm = ({ dispatch, history, fetching, submitError }) => {
 					>
 						Find
 					</Button>
-					{fetching && <CircularProgress className={classes.progress} />}
-					<Fade in={!!submitError}>
-						<Typography className={classes.errorText}>{submitError}</Typography>
+					{uploadFetching && <CircularProgress className={classes.progress} />}
+					<Fade in={!!uploadError}>
+						<Typography className={classes.errorText}>{uploadError}</Typography>
 					</Fade>
 				</div>
 			</div>
@@ -149,8 +149,8 @@ const FindForm = ({ dispatch, history, fetching, submitError }) => {
 }
 
 const mapStateToProps = state => ({
-	fetching: state.fetching,
-	submitError: state.error,
+	uploadFetching: state.uploadFetching,
+	uploadError: state.uploadError,
 })
 
-export default withRouter(connect(mapStateToProps)(FindForm));
+export default withRouter(connect(mapStateToProps)(UploadForm));

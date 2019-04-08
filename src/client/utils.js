@@ -41,6 +41,7 @@ export const parseRatingsFile = async file => {
 				ratings.push({
 					title: d[1],
 					year: d[2],
+					url: d[3].split('film/')[1],
 					rating: parseFloat(d[4]) * 2
 				});
 			}

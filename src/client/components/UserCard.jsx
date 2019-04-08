@@ -16,7 +16,8 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
 	card: {
-		maxWidth: 275,
+		width: 275,
+		margin: 25,
 	},
 	actions: {
 		display: 'flex',
@@ -31,12 +32,16 @@ const useStyles = makeStyles(theme => ({
 	},
 	filmText: {
 		margin: theme.spacing(1),
-		maxWidth: 'calc(100% - 30px)',
+		maxWidth: 'calc(100% - 10px)',
 		wordWrap: 'break-word',
+	},
+	link: {
+		textDecoration: 'none',
+		color: 'inherit',
 	},
 }));
 
-const UserCard = ({ name, displayScore = 100, films }) => {
+const UserCard = ({ name, score, films }) => {
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
 
@@ -52,15 +57,17 @@ const UserCard = ({ name, displayScore = 100, films }) => {
 				</Typography>
 			</CardContent>
 			<CardActions className={classes.actions}>
-				<Tooltip title={`${name}'s top films you haven't rated`} enterDelay={500}>
-					<Button
-						size="small"
-						onClick={() => setExpanded(!expanded)}
-					>
-						View Films
-						{expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-					</Button>
-				</Tooltip>
+				{films.length > 0 && (
+					<Tooltip title={`${name}'s top films you haven't rated`} enterDelay={500}>
+						<Button
+							size="small"
+							onClick={() => setExpanded(!expanded)}
+						>
+							View Films
+							{expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+						</Button>
+					</Tooltip>
+				)}
 				<Tooltip title="View profile" enterDelay={500}>
 					<IconButton onClick={onLaunchClick} className={classes.launch}>
 						<LaunchIcon />
@@ -68,11 +75,24 @@ const UserCard = ({ name, displayScore = 100, films }) => {
 				</Tooltip>
 			</CardActions>
 			<Collapse in={expanded}>
-				<div className={classes.collapseChildContainer}>
+				<CardContent className={classes.collapseChildContainer}>
 					{films.map(film => (
-						<Typography key={film.title} className={classes.filmText}>{film.title} ({film.year})</Typography>
+						<a 
+							key={film.title}
+							href={film.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							className={classes.link}
+						>
+							<Typography
+								className={classes.filmText}
+								color="textSecondary"
+							>
+								{film.title} ({film.year})
+							</Typography>
+						</a>
 					))}
-				</div>
+				</CardContent>
 			</Collapse>
 		</Card>
 

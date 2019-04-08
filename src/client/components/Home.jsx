@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import AppBar from './AppBar';
-import FindForm from './FindForm';
+import UploadForm from './UploadForm';
 import About from './About';
 
 const useStyles = makeStyles(theme => ({
@@ -27,7 +27,7 @@ export default function Home() {
 			<div className={classes.container}>
 				<Grid container>
 					<Grid item xs={12} md={6}>
-						<FindForm />
+						<UploadForm />
 					</Grid>
 					<Grid item xs={12} md={6}>
 						<About />
