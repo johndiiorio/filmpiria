@@ -16,6 +16,9 @@ const useStyles = makeStyles(theme => ({
 		flexWrap: 'wrap',
 		alignItems: 'flex-start',
 	},
+	noUsers: {
+		marginTop: 15,
+	},
 }));
 
 const Results = ({ results, history }) => {
@@ -32,7 +35,10 @@ const Results = ({ results, history }) => {
 				<Typography variant="h6">Results for {name}:</Typography>
 				<div className={classes.cardContainer}>
 					{topUsers.length === 0 ? (
-						<Typography variant="body1">No other users found</Typography>
+						<Typography variant="body1" className={classes.noUsers}>
+							We could not find any other similar users.
+							Other users must have rated at least 15 of the same films.
+						</Typography>
 					) : (
 						<>
 							{topUsers.map(user => (

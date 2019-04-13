@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const rateLimit = require("express-rate-limit");
+const helmet = require('helmet');
 const routes = require('./routes');
 
 const app = express();
@@ -17,11 +18,12 @@ const findLimiter = rateLimit({
 	max: 20,
 });
 
+app.use(helmet());
 app.use('/api/upload', uploadLimiter);
 app.use('/api/find', findLimiter);
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false, limit: '50mb', parameterLimit: 50000 }));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, '..', '..', 'build')));
 
 app.use('/api', routes);

@@ -22,7 +22,7 @@ router.post('/upload', async (req, res, next) => {
 		let { name: rawName, ratings: rawRatings } = req.body;
 		const name = rawName.toLowerCase();
 		const ratings = rawRatings.filter(r => {
-			if (typeof r.rating !== 'number') {
+			if (typeof r.rating !== 'number' || parseInt(r.rating) !== r.rating || (r.rating < 1 && r.rating > 10)) {
 				return false;
 			}
 			if (typeof r.year !== 'string' || r.length === 0) {
