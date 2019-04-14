@@ -22,8 +22,8 @@ app.use(helmet());
 app.use('/api/upload', uploadLimiter);
 app.use('/api/find', findLimiter);
 
-app.use(bodyParser.urlencoded({ extended: false, limit: '50mb', parameterLimit: 50000 }));
 app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '50mb', parameterLimit: 50000 }));
 app.use(express.static(path.join(__dirname, '..', '..', 'build')));
 
 app.use('/api', routes);
